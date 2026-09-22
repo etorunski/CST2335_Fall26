@@ -51,7 +51,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  late TextEditingController controller ;
+
   var isChecked = false; //for the checkbox
+String message = "Hi";
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();//initialize late variable
+  }
+
+  //leaving:
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.dispose(); //clear memory
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -97,21 +114,35 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(translate("hello"), style:TextStyle(fontSize: 30,color:Colors.green),),
+            Text(message, style:TextStyle(fontSize: 30,color:Colors.green),),
 
-            Semantics(child:Image.asset("assets/algonquin.jpg", height:300, width:300),
+            Semantics(child:Image.asset("assets/algonquin.jpg", height:200, width:200),
                 label:"Image of algonquin college"),
 
            Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(onPressed: ( ) {  } , //lambda function (no name)
+              child: ElevatedButton(onPressed: ( ) {
+                setState(() {
+
+                  //read controller text:
+                  message = "Your text is: "+ controller.value.text;
+
+
+                  //set the controller text:
+                  controller.text = "Type something new";
+                });
+
+
+              } ,
+
+                  //lambda function (no name)
                   child: Text(translate('pushed_message'))),
             ),
            Padding(child: ElevatedButton(
                 onPressed: buttonClicked,
                 child: Image.asset("assets/algonquin.jpg", width: 200, height:200)
             ),
-             padding: EdgeInsets.all(20)),
+             padding: EdgeInsets.all(2)),
 
             Checkbox(value:isChecked, onChanged: (bool? newvalue){
               setState(() {
@@ -125,7 +156,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 if(newvalue != null)
                   isChecked = newvalue;
               });  //update the GUI
-            } )
+            } ),
+
+
+            TextField(controller:controller,
+                decoration: InputDecoration(
+                    hintText:"Type here",
+                    border: OutlineInputBorder(),
+                    labelText: "First name"
+                )
+            )
+
           ],
         ),
       ),
