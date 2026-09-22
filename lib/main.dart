@@ -95,11 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(translate('pushed_message')),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+
+            Image.asset("assets/algonquin.jpg", height:500, width:500)
+
           ],
         ),
       ),
