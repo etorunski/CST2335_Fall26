@@ -1,11 +1,12 @@
 {
   "app_title": "Démonstration Flutter",
   "home_title": "Page d'accueil de démonstration Flutter",
-  "pushed_message": "Vous avez appuyé sur le bouton ce nombre de fois :",
+  "pushed_message": "Cliquez ici:",
   "increment": "Incrémenter",
   "language": "Langue",
   "english": "Anglais",
   "french": "Français",
   "arabic": "Arabe",
-  "italian": "Italien"
+  "italian": "Italien",
+  "hello" : "Bonjour"
 }

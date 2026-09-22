@@ -51,6 +51,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  var isChecked = false; //for the checkbox
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -95,9 +97,35 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(translate("hello"), style:TextStyle(fontSize: 30,color:Colors.green),),
 
-            Image.asset("assets/algonquin.jpg", height:500, width:500)
+            Semantics(child:Image.asset("assets/algonquin.jpg", height:300, width:300),
+                label:"Image of algonquin college"),
 
+           Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(onPressed: ( ) {  } , //lambda function (no name)
+                  child: Text(translate('pushed_message'))),
+            ),
+           Padding(child: ElevatedButton(
+                onPressed: buttonClicked,
+                child: Image.asset("assets/algonquin.jpg", width: 200, height:200)
+            ),
+             padding: EdgeInsets.all(20)),
+
+            Checkbox(value:isChecked, onChanged: (bool? newvalue){
+              setState(() {
+                if(newvalue != null)
+                  isChecked = newvalue;
+              });  //update the GUI
+            } ),
+
+            Switch(value:isChecked, onChanged: (bool? newvalue){
+              setState(() {
+                if(newvalue != null)
+                  isChecked = newvalue;
+              });  //update the GUI
+            } )
           ],
         ),
       ),
@@ -107,5 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void buttonClicked(){
+
   }
 }

@@ -1,11 +1,12 @@
 {
   "app_title": "عرض توضيحي لفلتر",
   "home_title": "الصفحة الرئيسية لعرض فلتر",
-  "pushed_message": "لقد قمت بالضغط على الزر هذا العدد من المرات:",
+  "pushed_message": "ar_push here",
   "increment": "زيادة",
   "language": "اللغة",
   "english": "الإنجليزية",
   "french": "الفرنسية",
   "arabic": "العربية",
-  "italian": "الإيطالية"
+  "italian": "الإيطالية",
+  "hello" : "ar_Hello"
 }
