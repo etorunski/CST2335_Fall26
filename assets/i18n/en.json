@@ -9,5 +9,7 @@
   "arabic": "Arabic",
   "italian": "Italian",
   "hello" : "Hello",
-  "image_semantics": "Image of algonquin college"
+  "image_semantics": "Image of algonquin college",
+  "nav1" : "Camera",
+  "nav2": "Phone"
 }

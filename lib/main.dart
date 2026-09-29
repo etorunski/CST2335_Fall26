@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
 
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
-      child: MaterialApp(
+      child:
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: translate('app_title'),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -78,9 +80,9 @@ String message = "Hi";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return
+      Scaffold(
+          appBar: AppBar(  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(translate('home_title')),
         actions: [
           PopupMenuButton<String>(
@@ -108,76 +110,43 @@ String message = "Hi";
               ),
             ],
           ),
+          FilledButton(child:Text("Button 2") , onPressed:() { }),
+          FilledButton(child:Text("Button 3") , onPressed:() { }),
         ],
       ),
+      drawer: Drawer(child:Text("Hi there") ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
-            //Text example:
-            Text(message, style:TextStyle(fontSize: 30,color:Colors.green),),
-
-
-            //Example of Semantics and Image
-            Semantics(child:
-              Image.asset("assets/algonquin.jpg", height:200, width:200),
-                label:translate("image_semantics")),
-
-           //Example of Padding around a Button
-           Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                ElevatedButton(onPressed: ( ) { //lambda function (no name)
-                    setState(() {
-                      message = "Your text is: "+ controller.value.text;
-                      //set the controller text:
-                      controller.text = "Type something new";
-                });
-              },
-                  child: Text(translate('pushed_message'))),
-            ),
-
-           //Example of padding around a Button:
-           Padding(child: ElevatedButton(
-                onPressed: buttonClicked,
-                child: Image.asset("assets/algonquin.jpg", width: 200, height:200)
-            ),
-             padding: EdgeInsets.all(2)),
-
-            //Example of a Checkbox displaying the value of a boolean
-            Checkbox(value:isChecked, onChanged: (bool? newvalue){
-              setState(() {
-                if(newvalue != null)
-                  isChecked = newvalue;
-              });  //update the GUI
-            } ),
-
-            //Example of a Switch displaying the value of the same boolean
-            Switch(value:isChecked, onChanged: (bool? newvalue){
-              setState(() {
-                if(newvalue != null)
-                  isChecked = newvalue;
-              });  //update the GUI
-            } ),
-
-          //example of a TextField with a TextController. The controller must be initialized in initState() and removed in dispose()
-            TextField(controller:controller,
-                decoration: InputDecoration(
-                    hintText:"Type here",
-                    border: OutlineInputBorder(),
-                    labelText: "First name"
-                )
-            )
-//end of Widgets
-
+            ElevatedButton(child:Text("Button 1") , onPressed:() { }),
+            ElevatedButton(child:Text("Button 2") , onPressed:() { }),
+            ElevatedButton(child:Text("Button 3") , onPressed:() { }),
+            ElevatedButton(child:Text("Button 4") , onPressed:() { })
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: translate('increment'),
-        child: const Icon(Icons.add),
-      ),
+        bottomNavigationBar:
+        BottomNavigationBar(
+          items:[
+            BottomNavigationBarItem(icon: Icon(Icons.camera ),
+                label: translate('nav1')),
+
+            BottomNavigationBarItem(icon:Icon(Icons.phone ) , label: translate('nav2')),
+
+          ],
+          onTap: (index){
+            switch(index){
+              case 0:
+                //camera
+                break;
+              case 1:
+                //phone
+                break;
+            }
+
+          },
+        )
     );
   }
 
