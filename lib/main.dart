@@ -115,17 +115,38 @@ String message = "Hi";
         ],
       ),
       drawer: Drawer(child:Text("Hi there") ),
-      body: Center(
-        child: Column(
+      body: Align(alignment: Alignment.center,
+        child:
+        Padding(child:
+          Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: .center,
           children: [
-            ElevatedButton(child:Text("Button 1") , onPressed:() { }),
-            ElevatedButton(child:Text("Button 2") , onPressed:() { }),
-            ElevatedButton(child:Text("Button 3") , onPressed:() { }),
-            ElevatedButton(child:Text("Button 4") , onPressed:() { })
-          ],
+            Text("One-pan skillet cookie", style:TextStyle(fontSize: 50, color: Colors.orangeAccent)),
+            Text("Ingredient list"),
+            SizedBox(height: 100, child:Text("")),
+            Row(children: [
+              Icon(Icons.star),
+              Text("1 Stick unsalted butter"),
+            ], mainAxisAlignment: MainAxisAlignment.start,),
+
+            Row(children: [
+              Icon(Icons.star, color: Colors.orangeAccent,),
+              Text("1/2 cup granulated sugar")
+            ], mainAxisAlignment: MainAxisAlignment.start,),
+
+            Row(children: [
+              Icon(Icons.star),
+              Text("1/2 cup brown sugar")
+            ], mainAxisAlignment: MainAxisAlignment.start,),
+
+          ]
+          ),
+          padding: EdgeInsetsGeometry.all(50.0)),
         ),
-      ),
+
+
+
         bottomNavigationBar:
         BottomNavigationBar(
           items:[
