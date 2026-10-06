@@ -1,6 +1,8 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easy_translate/flutter_easy_translate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,12 +58,26 @@ class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController controller ;
 
   var isChecked = false; //for the checkbox
-String message = "Hi";
+  String message = "Hi";
 
+  //this is the Snackbar object:
+  var snackBar = SnackBar( content: Text('Yay! A SnackBar!'),
+    action: SnackBarAction(label: 'Ok', onPressed:  () {  },));
+
+//beginning function:
   @override
   void initState() {
     super.initState();
     controller = TextEditingController();//initialize late variable
+
+    loadData(); //set the controller from any saved data
+
+    //this launches it:
+    Future.delayed(  Duration.zero  ,
+      (){ScaffoldMessenger.of(context).showSnackBar(snackBar); }
+    );
+
+
   }
 
   //leaving:
@@ -72,6 +88,37 @@ String message = "Hi";
     controller.dispose(); //clear memory
   }
 
+  // Load and obtain the shared preferences for this app.
+  Future<void> loadData()  async {
+
+    //await waits for this to finish before continuing.
+    final prefs = EncryptedSharedPreferences();
+
+    //asynchronous
+    prefs.getString("KeyInput").then( (input){
+      controller.text = input ?? ""; //?? means in case of null
+    });
+
+   }
+
+  // Load and obtain the shared preferences for this app.
+  Future<void> deleteData()  async {
+
+    //does not wait:
+    final prefs =  EncryptedSharedPreferences();
+
+    //asynchronous, but don't need returned
+     prefs.remove("KeyInput") ;
+  }
+
+  // Load and obtain the shared preferences for this app.
+  void saveData()  {
+    var prefs = EncryptedSharedPreferences();
+    
+    //asynchronous, but don't need returned
+    prefs.setString("KeyInput", controller.value.text);
+  }
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -80,6 +127,8 @@ String message = "Hi";
 
   @override
   Widget build(BuildContext context) {
+
+
     return
       Scaffold(
           appBar: AppBar(  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -122,52 +171,39 @@ String message = "Hi";
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: .center,
           children: [
-            Text("One-pan skillet cookie", style:TextStyle(fontSize: 50, color: Colors.orangeAccent)),
-            Text("Ingredient list"),
-            SizedBox(height: 100, child:Text("")),
-            Row(children: [
-              Icon(Icons.star),
-              Text("1 Stick unsalted butter"),
-            ], mainAxisAlignment: MainAxisAlignment.start,),
+OutlinedButton(child:
+          Text("Click for alert dialog", style:TextStyle(fontSize: 50, color: Colors.orangeAccent)),
+              onPressed: () {
+                //show a dialog window:
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Save data'),
+                    content: const Text('Do you want to save the string'),
+                    actions: <Widget>[
+                      OutlinedButton(child:Text("Ok"), onPressed: () {
+                        saveData();
+                        Navigator.pop(context);
+                      }),
+                      OutlinedButton(child:Text("Cancel"), onPressed: () {
+                        deleteData();
+                        Navigator.pop(context);
 
-            Row(children: [
-              Icon(Icons.star, color: Colors.orangeAccent,),
-              Text("1/2 cup granulated sugar")
-            ], mainAxisAlignment: MainAxisAlignment.start,),
+                      })
+                    ],
+                  ),
+                );
 
-            Row(children: [
-              Icon(Icons.star),
-              Text("1/2 cup brown sugar")
-            ], mainAxisAlignment: MainAxisAlignment.start,),
+              }
+              ,),
 
+            TextField(controller: controller, decoration: InputDecoration(label:Text("Input")))
           ]
           ),
           padding: EdgeInsetsGeometry.all(50.0)),
-        ),
-
-
-
-        bottomNavigationBar:
-        BottomNavigationBar(
-          items:[
-            BottomNavigationBarItem(icon: Icon(Icons.camera ),
-                label: translate('nav1')),
-
-            BottomNavigationBarItem(icon:Icon(Icons.phone ) , label: translate('nav2')),
-
-          ],
-          onTap: (index){
-            switch(index){
-              case 0:
-                //camera
-                break;
-              case 1:
-                //phone
-                break;
-            }
-
-          },
         )
+
+
     );
   }
 

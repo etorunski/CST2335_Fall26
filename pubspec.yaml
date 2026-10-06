@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   dartdoc: ^9.0.0
   flutter_easy_translate: ^1.0.8
+  shared_preferences: ^2.5.6
+  encrypted_shared_preferences: ^3.0.1
 
 dev_dependencies:
   flutter_test:
