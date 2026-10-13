@@ -96,7 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     //asynchronous
     prefs.getString("KeyInput").then( (input){
-      controller.text = input ?? ""; //?? means in case of null
+      if(input.isNotEmpty)
+        controller.text = input ;
     });
 
    }
@@ -114,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Load and obtain the shared preferences for this app.
   void saveData()  {
     var prefs = EncryptedSharedPreferences();
-    
+
     //asynchronous, but don't need returned
     prefs.setString("KeyInput", controller.value.text);
   }
