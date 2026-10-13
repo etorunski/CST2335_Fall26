@@ -1,8 +1,10 @@
-import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easy_translate/flutter_easy_translate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'OtherPage.dart';
+import 'DataRepository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +28,12 @@ class MyApp extends StatelessWidget {
       state: LocalizationProvider.of(context).state,
       child:
       MaterialApp(
+        routes: {
+          '/home' : (context)=> const MyHomePage(), //return MyHomePage() widget
+          '/otherPage' : (context)=> OtherPage(), //need to import
+
+        },
+        initialRoute: '/home',
         debugShowCheckedModeBanner: false,
         title: translate('app_title'),
         localizationsDelegates: [
@@ -39,7 +47,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const MyHomePage(),
+     //   home: const MyHomePage(), //replace with initialRoute:
       ),
     );
   }
@@ -53,31 +61,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+
 
   late TextEditingController controller ;
-
-  var isChecked = false; //for the checkbox
-  String message = "Hi";
-
-  //this is the Snackbar object:
-  var snackBar = SnackBar( content: Text('Yay! A SnackBar!'),
-    action: SnackBarAction(label: 'Ok', onPressed:  () {  },));
 
 //beginning function:
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();//initialize late variable
-
-    loadData(); //set the controller from any saved data
-
-    //this launches it:
-    Future.delayed(  Duration.zero  ,
-      (){ScaffoldMessenger.of(context).showSnackBar(snackBar); }
-    );
-
-
+    controller = TextEditingController(); //initialize late variable
+    controller.addListener(() {
+      //set the repository
+    });
   }
 
   //leaving:
@@ -88,47 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
     controller.dispose(); //clear memory
   }
 
-  // Load and obtain the shared preferences for this app.
-  Future<void> loadData()  async {
-
-    //await waits for this to finish before continuing.
-    final prefs = EncryptedSharedPreferences();
-
-    //asynchronous
-    prefs.getString("KeyInput").then( (input){
-      if(input.isNotEmpty)
-        controller.text = input ;
-    });
-
-   }
-
-  // Load and obtain the shared preferences for this app.
-  Future<void> deleteData()  async {
-
-    //does not wait:
-    final prefs =  EncryptedSharedPreferences();
-
-    //asynchronous, but don't need returned
-     prefs.remove("KeyInput") ;
-  }
-
-  // Load and obtain the shared preferences for this app.
-  void saveData()  {
-    var prefs = EncryptedSharedPreferences();
-
-    //asynchronous, but don't need returned
-    prefs.setString("KeyInput", controller.value.text);
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-
 
     return
       Scaffold(
@@ -167,48 +123,41 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: Drawer(child:Text("Hi there") ),
       body: Align(alignment: Alignment.center,
         child:
-        Padding(child:
+        Padding(padding: EdgeInsetsGeometry.all(50.0), child:
           Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: .center,
           children: [
-OutlinedButton(child:
-          Text("Click for alert dialog", style:TextStyle(fontSize: 50, color: Colors.orangeAccent)),
-              onPressed: () {
-                //show a dialog window:
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Save data'),
-                    content: const Text('Do you want to save the string'),
-                    actions: <Widget>[
-                      OutlinedButton(child:Text("Ok"), onPressed: () {
-                        saveData();
-                        Navigator.pop(context);
-                      }),
-                      OutlinedButton(child:Text("Cancel"), onPressed: () {
-                        deleteData();
-                        Navigator.pop(context);
 
-                      })
-                    ],
-                  ),
-                );
+            Row(children: [
+              Flexible(child: //or Expanded(child:
+              TextField(controller: controller,
+                  decoration: InputDecoration(
+                label:Text("Type in here")))),
+              IconButton(onPressed: () { }, icon: Icon(Icons.phone),),
+          ])
 
-              }
-              ,),
+            ,
+            OutlinedButton(child:
+              Text("Click for Next Page", style:TextStyle(fontSize: 50, color: Colors.orangeAccent)),
+                onPressed: () {
+                  DataRepository.pageOneString = controller.value.text; //store the string
+                  Navigator.pushNamed(context, '/otherPage');//look up what is'/otherPage' in the routes:
+                }),
 
-            TextField(controller: controller, decoration: InputDecoration(label:Text("Input")))
+
+            OutlinedButton(child: Icon(Icons.phone),
+                onPressed: ( ) async {
+                var canCall = await canLaunchUrl(Uri.parse("tel:613-727-4723")); //asynchronous
+
+                if(canCall)
+                  launchUrl(Uri.parse("tel:613-727-4723"));
+            })
           ]
-          ),
-          padding: EdgeInsetsGeometry.all(50.0)),
+
+          )),
         )
-
-
     );
   }
 
-  void buttonClicked(){
-
-  }
 }
