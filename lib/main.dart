@@ -153,6 +153,9 @@ String message = "Hi";
         },),
 
       Expanded(child:
+      (courses.length == 0)?
+      Text("No items")
+        :
         ListView.builder(itemCount: courses.length,
           itemBuilder: (context,index){
             return  ListTile(
