@@ -65,7 +65,8 @@ String message = "Hi";
     super.initState();
     controller = TextEditingController();//initialize late variable
 
-    db = AppDatabase.instance();
+    db = AppDatabase();
+
     // 1. Insert a user (returns generated ID)
     db.saveUser('JohnDoe', 'Jazz', 101).then((id) async {
       newUserId = id;
@@ -131,52 +132,6 @@ String message = "Hi";
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //Text example:
-            Text(message, style:TextStyle(fontSize: 30,color:Colors.green),),
-
-
-            //Example of Semantics and Image
-            Semantics(child:
-              Image.asset("assets/algonquin.jpg", height:200, width:200),
-                label:translate("image_semantics")),
-
-           //Example of Padding around a Button
-           Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                ElevatedButton(onPressed: ( ) { //lambda function (no name)
-                    setState(() {
-                      message = "Your text is: "+ controller.value.text;
-                      //set the controller text:
-                      controller.text = "Type something new";
-                });
-              },
-                  child: Text(translate('pushed_message'))),
-            ),
-
-           //Example of padding around a Button:
-           Padding(child: ElevatedButton(
-                onPressed: buttonClicked,
-                child: Image.asset("assets/algonquin.jpg", width: 200, height:200)
-            ),
-             padding: EdgeInsets.all(2)),
-
-            //Example of a Checkbox displaying the value of a boolean
-            Checkbox(value:isChecked, onChanged: (bool? newvalue){
-              setState(() {
-                if(newvalue != null)
-                  isChecked = newvalue;
-              });  //update the GUI
-            } ),
-
-            //Example of a Switch displaying the value of the same boolean
-            Switch(value:isChecked, onChanged: (bool? newvalue){
-              setState(() {
-                if(newvalue != null)
-                  isChecked = newvalue;
-              });  //update the GUI
-            } ),
-
           //example of a TextField with a TextController. The controller must be initialized in initState() and removed in dispose()
             TextField(controller:controller,
                 decoration: InputDecoration(
