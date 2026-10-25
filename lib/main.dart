@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easy_translate/flutter_easy_translate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'AppDatabase.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -50,6 +52,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  late AppDatabase db ;
+  int newUserId = 0;
 
   late TextEditingController controller ;
 
@@ -60,6 +64,19 @@ String message = "Hi";
   void initState() {
     super.initState();
     controller = TextEditingController();//initialize late variable
+
+    db = AppDatabase.instance();
+    // 1. Insert a user (returns generated ID)
+    db.saveUser('JohnDoe', 'Jazz', 101).then((id) async {
+      newUserId = id;
+
+      var allUsers = await db.getAllUsers().get();
+
+      for (var user in allUsers) {
+        print('User: ${user.username}, ${user.musicStyle}, ${user.favoriteSong}');
+      }
+    });
+
   }
 
   //leaving:

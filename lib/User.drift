@@ -1,0 +1,12 @@
+CREATE TABLE User (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    music_style TEXT NOT NULL,
+    favorite_song INT NOT NULL
+) As UserTable;
+
+saveUser: INSERT INTO User (username, music_style, favorite_song) VALUES (:username, :music_style, :favorite_song);
+getAllUsers: SELECT * FROM User;
+getUserById: SELECT * FROM User WHERE id = :id;
+deleteUser: DELETE FROM User WHERE id = :id;
+updateUser: UPDATE User SET username = :username, music_style = :music_style, favorite_song = :favorite_song WHERE id = :id;
