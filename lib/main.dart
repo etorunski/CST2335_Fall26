@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easy_translate/flutter_easy_translate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'AppDatabase.dart';
+
 
 
 class CourseInfo(
@@ -57,7 +59,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-    List<CourseInfo> courses = [ ]; //Array initialization
+    List<User> users = [ ]; //Array initialization
+
+    late AppDatabase db;
 
     var words2 =  <String> []; //Array initialization
 
@@ -72,6 +76,8 @@ String message = "Hi";
     super.initState();
     controller = TextEditingController();//initialize late variable
     controller2 = TextEditingController();//initialize late variable
+
+    db = AppDatabase();// This creates the local database connection
   }
 
   //leaving:
@@ -146,21 +152,31 @@ String message = "Hi";
         OutlinedButton(child: Text("Insert"), onPressed: (){
 
           setState(() {
-            var newCourse = CourseInfo(controller.value.text, controller.value.text);
-            courses.add(newCourse);//insert into list
+            var newCourse = CourseInfo(controller.value.text, controller2.value.text);
+
+
+            //add to database, returns the ID asynchronously:
+           db.saveUser(controller.value.text, controller2.value.text, "favoriteSong")
+               .then((id){
+                 var newItem = User(id:id,
+                                    username:controller.value.text,
+                                    musicStyle: controller2.value.text,
+                                    favoriteSong: 12 );
+                users.add(newItem);
+           });
           });
           controller.text = "";//erase what user typed in
         },),
 
       Expanded(child:
-      (courses.length == 0)?
+      ( users.length == 0)?
       Text("No items")
         :
-        ListView.builder(itemCount: courses.length,
+        ListView.builder(itemCount: users.length,
           itemBuilder: (context,index){
             return  ListTile(
                   title: Text("Course Info:"),
-                  subtitle: Text("Course Code: ${courses[index].courseCode} Course Title: ${courses[index].courseTitle}"),
+                  subtitle: Text("Course Code: ${users[index].username} Course Title: ${users[index].musicStyle}"),
                   onLongPress: (){
                     showDialog<String>(
                       context: context,
@@ -170,7 +186,7 @@ String message = "Hi";
                         actions: <Widget>[
                           OutlinedButton(child:Text("Yes"), onPressed: (){
                             setState(() {
-                              courses.removeAt(index); //remove item at index
+                              users.removeAt(index); //remove item at index
                               Navigator.pop(context);
                             });
 
