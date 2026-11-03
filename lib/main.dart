@@ -59,7 +59,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-    List<User> users = [ ]; //Array initialization
+    List<UserTable> users = [ ]; //Array initialization
 
     late AppDatabase db;
 
@@ -78,6 +78,15 @@ String message = "Hi";
     controller2 = TextEditingController();//initialize late variable
 
     db = AppDatabase();// This creates the local database connection
+
+    //get the data back from database:
+    db.getAllUsers().get().then((list) {
+      setState(() {
+        users = list;
+      });
+
+
+    }) ;//has your data asynchnously
   }
 
   //leaving:
@@ -156,9 +165,9 @@ String message = "Hi";
 
 
             //add to database, returns the ID asynchronously:
-           db.saveUser(controller.value.text, controller2.value.text, "favoriteSong")
+           db.saveUser(controller.value.text, controller2.value.text, 23)
                .then((id){
-                 var newItem = User(id:id,
+                 var newItem = UserTable(id:id,
                                     username:controller.value.text,
                                     musicStyle: controller2.value.text,
                                     favoriteSong: 12 );

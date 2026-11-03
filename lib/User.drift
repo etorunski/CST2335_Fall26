@@ -1,12 +1,9 @@
-
-CREATE TABLE UserTable (
+CREATE TABLE User (
     id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
     music_style TEXT NOT NULL,
     favorite_song INT NOT NULL
-) As User;
-
-
+) As UserTable;
 
 saveUser: INSERT INTO User (username, music_style, favorite_song) VALUES (:username, :music_style, :favorite_song);
 getAllUsers: SELECT * FROM User;
